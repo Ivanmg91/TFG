@@ -18,11 +18,11 @@ button {
     cursor: pointer;
 }
 
-#results {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+#result {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Ajusta el número de columnas automáticamente */
+    gap: 16px; /* Espaciado entre las tarjetas */
+    padding: 16px; /* Espaciado interno del contenedor */
 }
 
 .card {
