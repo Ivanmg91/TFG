@@ -1,54 +1,187 @@
-const API_KEY = "TU_CLAVE_RAPIDAPI";
-const API_HOST = "streaming-availability.p.rapidapi.com";
+class Show { 
 
-async function searchMovies() {
-    const query = document.getElementById("searchInput").value;
-    if (!query) return alert("Escribe un título");
+    constructor(itemType, showType, id, imdbId, tmdbId, title, overview, firstAirYear, lastAirYear, originalTitle, genres, creators, cast, rating, seasonCount, episodeCount, imageSet, streamingOptions) { 
 
-    const url = `https://${API_HOST}/shows/search/title?series_granularity=show&show_type=movie&output_language=en&title=${encodeURIComponent(query)}`;
+        this.itemType = itemType; 
 
-    const options = {
-        method: "GET",
-        headers: {
-            "x-rapidapi-key": API_KEY,
-            "x-rapidapi-host": API_HOST
-        }
-    };
+        this.showType = showType; 
 
-    try {
-        const response = await fetch(url, options);
-        const data = await response.json();
-        displayResults(data.shows || []);
-    } catch (error) {
-        console.error("Error al buscar películas:", error);
-    }
-}
+        this.id = id; 
 
-function displayResults(movies) {
-    const resultsDiv = document.getElementById("results");
-    resultsDiv.innerHTML = "";
+        this.imdbId = imdbId; 
 
-    if (movies.length === 0) {
-        resultsDiv.innerHTML = "<p>No se encontraron resultados.</p>";
-        return;
-    }
+        this.tmdbId = tmdbId; 
 
-    movies.forEach(movie => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-            <img src="${movie.image || 'https://via.placeholder.com/150'}" width="150">
-            <h3>${movie.title}</h3>
-            <p>${getStreamingPlatforms(movie)}</p>
-        `;
-        resultsDiv.appendChild(card);
-    });
-}
+        this.title = title; 
 
-function getStreamingPlatforms(movie) {
-    if (!movie.streamingInfo || Object.keys(movie.streamingInfo).length === 0) return "No disponible en streaming";
+        this.overview = overview; 
 
-    return Object.keys(movie.streamingInfo)
-        .map(platform => platform.toUpperCase())
-        .join(", ");
-}
+        this.firstAirYear = firstAirYear; 
+
+        this.lastAirYear = lastAirYear; 
+
+        this.originalTitle = originalTitle; 
+
+        this.genres = genres; 
+
+        this.creators = creators; 
+
+        this.cast = cast; 
+
+        this.rating = rating; 
+
+        this.seasonCount = seasonCount; 
+
+        this.episodeCount = episodeCount; 
+
+        this.imageSet = imageSet; 
+
+        this.streamingOptions = streamingOptions; 
+
+    } 
+
+} 
+
+ 
+
+// List to store shows 
+
+const showList = []; 
+
+ 
+
+// Function to get api info and store it 
+
+async function fetchShows() { 
+
+    const url = 'https://streaming-availability.p.rapidapi.com/shows/search/filters?country=es&output_language=es'; 
+
+    const options = { 
+
+        method: 'GET', 
+
+        headers: { 
+
+            'x-rapidapi-key': 'af2469ec88msh6b559a4140ac497p19de27jsn094c3d8b6fb0', 
+
+            'x-rapidapi-host': 'streaming-availability.p.rapidapi.com' 
+
+        } 
+
+    }; 
+
+ 
+
+    try { 
+
+        const response = await fetch(url, options); 
+
+        console.log(result); 
+
+ 
+
+        const dataResult = await response.json(); 
+
+ 
+
+        // Add each show in a list 
+
+        dataResult.shows.forEach(showData => { 
+
+            const show = new Show( 
+
+                showData.itemType, 
+
+                showData.showType, 
+
+                showData.id, 
+
+                showData.imdbId, 
+
+                showData.tmdbId, 
+
+                showData.title, 
+
+                showData.overview, 
+
+                showData.releaseYear, 
+
+                null, 
+
+                showData.originalTitle, 
+
+                showData.genres.map(genre => genre.name), 
+
+                showData.directors, 
+
+                showData.cast, 
+
+                showData.rating, 
+
+                null, 
+
+                null, 
+
+                showData.imageSet, 
+
+                showData.streamingOptions 
+
+            ); 
+
+            showList.push(show); 
+
+        }); 
+
+         
+
+    } catch (error) { 
+
+        console.error(error); 
+
+    } 
+
+} 
+
+ 
+
+function displayShows() { 
+
+ 
+
+} 
+
+ 
+
+function displayShowsInDOM() { 
+
+    const resultContainer = document.getElementById('result'); 
+
+    resultContainer.innerHTML = ''; // Clear previous content 
+
+ 
+
+    showList.forEach(show => { 
+
+        const showElement = document.createElement('div'); 
+
+        showElement.innerHTML = ` 
+
+            <h3>${show.title} (${show.firstAirYear} - ${show.lastAirYear || 'Present'})</h3> 
+
+            <p>${show.overview}</p> 
+
+            <p><strong>Calificación:</strong> ${show.rating}</p> 
+
+        `; 
+
+        resultContainer.appendChild(showElement); 
+
+    }); 
+
+} 
+
+ 
+
+document.getElementById('fetchData').addEventListener('click', fetchShows); 
+
+document.getElementById('showData').addEventListener('click', displayShowsInDOM); 
