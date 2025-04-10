@@ -26,7 +26,7 @@ const showList = [];
 let hasMore = false;
 let nextCursor = null;
 
-const maxShows = 50; // Allow adjust the card list limit
+const maxShows = 10; // Allow adjust the card list limit
 
 async function fetchAllShows() {
     let url = 'https://streaming-availability.p.rapidapi.com/shows/search/filters?country=es&output_language=es';
