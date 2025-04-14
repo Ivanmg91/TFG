@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "streaming-availability": "^4.4.0"
+  }
+}
